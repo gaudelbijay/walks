@@ -57,14 +57,24 @@ class BiasedRandomWalk:
                 else:
                     prev = walk[-2]
                     edge = (prev, cur)
-                    next_node = cur_nbrs[alias_sample(alias_edges[edge][0],
-                                                      alias_edges[edge][1])]
+                    next_node = cur_nbrs[alias_sample(alias_edges[edge][0],alias_edges[edge][1])]
                     walk.append(next_node)
             else:
                 break
 
         return walk
-            
+    
+    def node2vec_walk_corpus(self,num_walks=50,walk_length=10):
+        walk_corpus = []
+        nodes = list(self.G.nodes())
+        for _ in range(num_walks):
+            random.shuffle(nodes)
+            for v in nodes:
+                walk_corpus.append(self.node2vec_walk(walk_length=walk_length,start_node=v))
+        
+        return walk_corpus
+
+    
 def create_alias_table(area_ratio):
     N = len(area_ratio)
     accept,alias = [0]*N,[0]*N
