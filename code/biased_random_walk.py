@@ -44,9 +44,32 @@ class BiasedRandomWalk:
 
             return create_alias_table(normalized_probability)
             
-    def create_alias_table(area_ratio):
-        pass
+def create_alias_table(area_ratio):
+    N = len(area_ratio)
+    accept,alias = [0]*N,[0]*N
+    small,large = [],[]
+    for i,val in enumerate(area_ratio):
+        if val>1:
+            large.append(i)
+        else: small.append(i)
+    while large and small:
+        large_idx,small_idx = large.pop(),small.pop()
+        accept[small_idx]=area_ratio[small_idx]
+        alias[small_idx]=large_idx
+        area_ratio[large_idx] = area_ratio[large_idx] - (1 - area_ratio[small_idx])
+        if area_ratio[large_idx]<1.0:
+            small.append(large_idx)
+        else: large.append(large_idx)
+    
+    while small:
+        small_idx = small.pop()
+        accept[small_idx]=1
 
+    while large:
+        large_idx = large.pop()
+        accept[large_idx]=1
+        
+    return accept,alias
 
 def main():
     graph = nx.read_edgelist('../data/Wiki_edgelist.txt',create_using=nx.DiGraph(),nodetype=None,data=[('weight',int)])
