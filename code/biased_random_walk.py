@@ -45,7 +45,25 @@ class BiasedRandomWalk:
             return create_alias_table(normalized_probability)
 
     def node2vec_walk(self,walk_length,start_node):
-        
+        alias_edge = self.alias_edge
+        alias_node = self.alias_node 
+        walk = [start_node]
+        while len(walk)<walk_length:
+            cur = walk[-1]
+            cur_neighbors = list(G.neighbors(cur))
+            if len(cur_neighbors)>0:
+                if len(walk)==1:
+                    walk.append(cur_nbrs[alias_sample(alias_nodes[cur][0], alias_nodes[cur][1])]))
+                else:
+                    prev = walk[-2]
+                    edge = (prev, cur)
+                    next_node = cur_nbrs[alias_sample(alias_edges[edge][0],
+                                                      alias_edges[edge][1])]
+                    walk.append(next_node)
+            else:
+                break
+
+        return walk
             
 def create_alias_table(area_ratio):
     N = len(area_ratio)
