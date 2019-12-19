@@ -71,6 +71,16 @@ def create_alias_table(area_ratio):
         
     return accept,alias
 
+def alias_sample(accept,alias):
+    N = len(accept)
+    i = int(np.random.random()*N)
+    r = np.random.random()
+    if r < accept[i]:
+        return i
+    else:
+        return alias[i]
+
+
 def main():
     graph = nx.read_edgelist('../data/Wiki_edgelist.txt',create_using=nx.DiGraph(),nodetype=None,data=[('weight',int)])
     brw = BiasedRandomWalk(graph)
