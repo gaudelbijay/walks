@@ -43,6 +43,9 @@ class BiasedRandomWalk:
             normalized_probability = [float(up)/norm_const for up in unnormalized_probability]
 
             return create_alias_table(normalized_probability)
+
+    def node2vec_walk(self,walk_length,start_node):
+        
             
 def create_alias_table(area_ratio):
     N = len(area_ratio)
